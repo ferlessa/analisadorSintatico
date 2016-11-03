@@ -1,0 +1,43 @@
+grammar asfernanda;
+
+ADDOP : '+' | '-';
+MULOP : '*' | '/';
+expr : expr ADDOP term | term;
+term : term MULOP NUM | NUM;
+
+variavel : TIPO_DADO ID';'| TIPO_DADO ID '=' NUM ';'| ID;
+atribuicao : TIPO_DADO? ID '=' expr;
+metodo : DECLARACAO_METODO (TIPO_DADO | 'void') ID '(' TIPO_DADO ID')''{'
+	expr? '}';
+
+classe : 'class' ID ('extends' ID)? '{' declaracao* '}' ('}');
+ 
+declaracao : '{'(declaracao)'}'
+	|'if' '(' op_cond ')' declaracao 
+	|'if' '(' op_cond ')' declaracao 'else' declaracao
+	|'while' '(' op_cond ')' '{' (expr|declaracao|variavel)|(variavel OP_ATRIBUICAO)?';' '}'
+	|'for' '(' variavel variavel OP_RELACIONAL NUM ';' variavel OP_ATRIBUICAO ')' '{' (expr|declaracao|variavel)'}'
+	|'System.out.println' '(' (expr|variavel|NUM)')' ';' 
+	|'sout' '(' expr ')' ';'  //forma reduzida do system.out.print aceita pelo netbeans
+	| metodo 
+	| variavel  
+	| atribuicao ;
+	
+	
+op_cond: (NUM|variavel) OP_RELACIONAL (NUM|variavel);
+
+OP_LOGICO : '&&'|'||'|'!'|'&'|'|';
+OP_RELACIONAL : '>'|'<'|'=='|'!='|'>='|'<='|'<<'|'>>';
+OP_ATRIBUICAO : '+='|'-='|'*='|'/='|'%='|'++'|'--'|'=';
+COMMENTS : '//'|'/*'|'*/';
+WS :[ \t\r\n]+ -> skip ;
+
+TIPO_DADO : 'int'|'double'|'float'|'boolean';
+DECLARACAO_METODO : 'public'|'private';
+
+ID : [a-z]+ ;
+NUM : [0-9]+'.'[0-9]+|[0-9]+ ;
+
+
+
+ 
